@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sifuna Party</title>
+  <meta name="description" content="Sifuna Party — a fair start for every community.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+/* ===== Tokens ===== */
+:root {
+  --teal: #0f4c4a;
+  --teal-deep: #0a3533;
+  --marigold: #f2a900;
+  --mist: #f3f6f4;
+  --white: #ffffff;
+  --ink: #1b2a2a;
+  --muted: #55676a;
+  --line: #d5dfdc;
+  --danger: #c0392b;
+  --success: #0f7b5f;
+
+  --font-head: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+
+  --step-0: 1.0625rem;
+  --step-1: 1.375rem;
+  --step-2: 1.875rem;
+  --step-3: clamp(2.25rem, 4vw + 1rem, 3.5rem);
+  --step-4: clamp(2.75rem, 7vw + 0.5rem, 5.5rem);
+
+  --wrap: 1120px;
+  --gap: clamp(1rem, 3vw, 2rem);
+}
+
+/* ===== Base ===== */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--white);
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--font-head); line-height: 1.1; margin: 0 0 0.5em; letter-spacing: -0.02em; }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-1); }
+p { margin: 0 0 1em; max-width: 68ch; }
+:focus-visible { outline: 3px solid var(--marigold); outline-offset: 3px; }
+
+.wrap { width: min(100% - 2rem, var(--wrap)); margin-inline: auto; }
+.section { padding-block: clamp(3.5rem, 8vw, 6.5rem); }
+.section--mist { background: var(--mist); }
+.section--teal { background: var(--teal); color: var(--white); }
+.section-head { max-width: 40rem; margin-bottom: 2.5rem; }
+.section-head p { color: var(--muted); }
+.section--teal .section-head p { color: #c5dcd9; }
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-block;
+  font: 600 1rem var(--font-body);
+  padding: 0.85em 1.5em;
+  border: 2px solid var(--marigold);
+  background: var(--marigold);
+  color: var(--teal-deep);
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.btn:hover { background: var(--teal-deep); color: var(--marigold); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn--ghost { background: transparent; color: var(--white); border-color: var(--white); }
+.btn--ghost:hover { background: var(--white); color: var(--teal-deep); }
+
+/* ===== Header ===== */
+.site-header { position: sticky; top: 0; z-index: 20; background: var(--teal-deep); color: var(--white); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 4rem; }
+.brand { display: flex; align-items: center; gap: 0.6rem; font: 700 1.2rem var(--font-head); text-decoration: none; }
+.brand-mark { width: 2rem; height: 2rem; border-radius: 50%; background: var(--marigold); box-shadow: inset -0.55rem 0 0 var(--teal-deep), inset -0.55rem 0 0 2px var(--marigold); }
+.nav ul { list-style: none; display: flex; gap: 1.5rem; margin: 0; padding: 0; }
+.nav a { text-decoration: none; font-weight: 500; padding-block: 0.4rem; border-bottom: 2px solid transparent; }
+.nav a:hover { border-bottom-color: var(--marigold); }
+.nav-toggle { display: none; background: none; border: 2px solid var(--white); color: var(--white); padding: 0.4rem 0.8rem; border-radius: 6px; font: 600 0.95rem var(--font-body); cursor: pointer; }
+
+/* ===== Hero ===== */
+.hero { background: var(--teal); color: var(--white); padding-block: clamp(3rem, 8vw, 6rem); }
+.hero .wrap { display: grid; gap: calc(var(--gap) * 2); grid-template-columns: 1.4fr 1fr; align-items: center; }
+.hero h1 { font-size: var(--step-4); margin-bottom: 0.3em; }
+.hero p { font-size: var(--step-1); color: #d6e8e5; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.5rem; }
+.join-card { background: var(--white); color: var(--ink); border-radius: 10px; padding: 1.75rem; border-top: 6px solid var(--marigold); }
+.join-card h2 { font-size: var(--step-2); }
+.join-card p { color: var(--muted); font-size: 0.98rem; }
+
+/* ===== Forms ===== */
+label { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
+input, textarea, select {
+  width: 100%;
+  font: inherit;
+  padding: 0.7em 0.8em;
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  background: var(--white);
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--teal); }
+textarea { min-height: 8rem; resize: vertical; }
+.form-note { font-size: 0.9rem; color: var(--muted); margin-top: 0.75rem; }
+
+/* ===== Updates ===== */
+.updates { display: grid; gap: var(--gap); grid-template-columns: repeat(3, 1fr); }
+.update { border-top: 3px solid var(--teal); padding-top: 1rem; }
+.update time { display: block; color: var(--muted); font-size: 0.92rem; margin-bottom: 0.4rem; }
+.update h3 { margin-bottom: 0.4rem; }
+.update a { font-weight: 600; color: var(--teal); }
+
+/* ===== About ===== */
+.about-grid { display: grid; gap: calc(var(--gap) * 2); grid-template-columns: 1fr 1fr; align-items: start; }
+.pillars { display: grid; gap: 1.25rem; }
+.pillar { padding-left: 1.25rem; border-left: 4px solid var(--marigold); }
+.pillar h3 { margin-bottom: 0.25rem; }
+.pillar p { margin: 0; color: var(--muted); }
+.video-frame { aspect-ratio: 16 / 9; background: var(--teal-deep); border-radius: 10px; display: grid; place-items: center; color: #c5dcd9; text-align: center; padding: 1rem; }
+
+/* ===== Resources ===== */
+.doc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.doc-list li { border-bottom: 1px solid var(--line); }
+.doc-list a { display: flex; justify-content: space-between; gap: 1rem; padding: 1.1rem 0.25rem; text-decoration: none; font-weight: 600; }
+.doc-list a span { color: var(--muted); font-weight: 400; font-size: 0.95rem; }
+.doc-list a:hover { background: var(--mist); }
+
+/* ===== Figures ===== */
+.figures { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); margin: 0; }
+.figures div { border-top: 3px solid var(--marigold); padding-top: 0.75rem; }
+.figures dt { font: 700 var(--step-3) var(--font-head); line-height: 1; }
+.figures dd { margin: 0.4rem 0 0; color: #c5dcd9; }
+
+/* ===== Donate ===== */
+.donate-grid { display: grid; gap: var(--gap); grid-template-columns: repeat(3, 1fr); }
+.donate-card { background: var(--white); border: 1.5px solid var(--line); border-radius: 10px; padding: 1.5rem; }
+.donate-card h3 { margin-bottom: 0.75rem; }
+.donate-card dl { margin: 0; }
+.donate-card dt { color: var(--muted); font-size: 0.9rem; }
+.donate-card dd { margin: 0 0 0.6rem; font-weight: 600; }
+
+/* ===== STK Donate card ===== */
+.stk-card { background: var(--white); border: 1.5px solid var(--line); border-top: 6px solid var(--marigold); border-radius: 10px; padding: 1.5rem; }
+.stk-card h3 { margin-bottom: 0.5rem; }
+.stk-card p.intro { color: var(--muted); font-size: 0.94rem; margin-bottom: 1rem; }
+.amount-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+.amount-pill {
+  flex: 1 1 auto; min-width: 90px; text-align: center;
+  padding: 0.6em 0.4em;
+  border: 1.5px solid var(--line);
+  background: var(--white);
+  border-radius: 6px;
+  font: 600 0.95rem var(--font-body);
+  cursor: pointer;
+  transition: 0.15s;
+}
+.amount-pill:hover { border-color: var(--marigold); }
+.amount-pill.active { background: var(--teal-deep); color: var(--marigold); border-color: var(--teal-deep); }
+
+.stk-status { font-size: 0.9rem; padding: 0.75rem 0.9rem; border-radius: 6px; margin-bottom: 0.75rem; display: none; }
+.stk-status.show { display: block; }
+.stk-status.info { background: #eaf5f1; color: var(--teal); border: 1px solid #c8e4da; }
+.stk-status.err  { background: #fdecea; color: var(--danger); border: 1px solid #f5c6c2; }
+.stk-status.ok   { background: #e7f5ef; color: var(--success); border: 1px solid #b9e0cf; }
+.stk-status .spinner {
+  display: inline-block; width: 14px; height: 14px;
+  border: 2px solid rgba(15,76,74,.25);
+  border-top-color: var(--teal);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: -2px;
+  margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== Contact ===== */
+.contact-grid { display: grid; gap: calc(var(--gap) * 2); grid-template-columns: 1fr 1.2fr; }
+.contact-list { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 0.9rem; }
+.contact-list strong { display: block; }
+.map-placeholder { margin-top: 1.5rem; aspect-ratio: 16 / 9; background: var(--mist); border: 1.5px dashed var(--line); border-radius: 10px; display: grid; place-items: center; color: var(--muted); text-align: center; padding: 1rem; }
+
+/* ===== Footer ===== */
+.site-footer { background: var(--teal-deep); color: #c5dcd9; padding-block: 2rem; font-size: 0.95rem; }
+.site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+.site-footer ul { list-style: none; display: flex; gap: 1.25rem; margin: 0; padding: 0; }
+.site-footer a { color: var(--white); }
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .hero .wrap, .about-grid, .contact-grid { grid-template-columns: 1fr; }
+  .updates, .donate-grid { grid-template-columns: 1fr; }
+  .figures { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .nav-toggle { display: block; }
+  .nav { display: none; position: absolute; top: 4rem; left: 0; right: 0; background: var(--teal-deep); padding: 1rem; }
+  .nav.is-open { display: block; }
+  .nav ul { flex-direction: column; gap: 0.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .amount-pill { transition: none; }
+}
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>Sifuna Party</a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <ul>
+        <li><a href="#updates">Updates</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#resources">Documents</a></li>
+        <li><a href="#donate">Donate</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>A fair start for every community.</h1>
+        <p>Replace this line with your organization's core promise, in one or two sentences.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#join">Become a member</a>
+          <a class="btn btn--ghost" href="#about">Read our mission</a>
+        </div>
+      </div>
+
+      <div class="join-card" id="join">
+        <h2>Join in two minutes</h2>
+        <p>Tell us how to reach you and your county. A local coordinator will follow up.</p>
+        <form action="#" method="post" onsubmit="event.preventDefault(); alert('Form is a placeholder — connect to your backend.');">
+          <label for="j-name">Full name</label>
+          <input id="j-name" name="name" type="text" autocomplete="name" required>
+          <label for="j-phone">Phone number</label>
+          <input id="j-phone" name="phone" type="tel" autocomplete="tel" required>
+          <label for="j-county">County</label>
+          <input id="j-county" name="county" type="text" required>
+          <button class="btn" type="submit">Join now</button>
+          <p class="form-note">Connect this form to your backend (PHP, Django, or an API) before launch.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="updates">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Latest updates</h2>
+        <p>Announcements, notices, and events from the national office and regional branches.</p>
+      </div>
+      <div class="updates">
+        <article class="update">
+          <time datetime="2026-10-01">1 October 2026</time>
+          <h3>Public notice headline</h3>
+          <p>Short summary of the notice. Keep it to two sentences and link to the full text.</p>
+          <a href="#">Read the notice</a>
+        </article>
+        <article class="update">
+          <time datetime="2026-09-20">20 September 2026</time>
+          <h3>Event or meeting title</h3>
+          <p>Where it takes place, who should attend, and what to bring.</p>
+          <a href="#">See event details</a>
+        </article>
+        <article class="update">
+          <time datetime="2026-09-05">5 September 2026</time>
+          <h3>Community project update</h3>
+          <p>What was completed, who it helped, and what comes next.</p>
+          <a href="#">Read the update</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--mist" id="about">
+    <div class="wrap about-grid">
+      <div>
+        <h2>Who we are</h2>
+        <p>Write two short paragraphs here: when and how the organization was formed, the laws it operates under, and the problems it exists to solve.</p>
+        <p>Keep claims specific and verifiable. Visitors trust concrete facts over slogans.</p>
+        <div class="video-frame">Embed an introduction video here (YouTube iframe)</div>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <h3>Our mission</h3>
+          <p>One sentence describing what you do and for whom.</p>
+        </div>
+        <div class="pillar">
+          <h3>Our vision</h3>
+          <p>One sentence describing the country or community you want to see in ten years.</p>
+        </div>
+        <div class="pillar">
+          <h3>Our commitments</h3>
+          <p>Two or three concrete promises members can hold you to.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="resources">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Official documents</h2>
+        <p>Constitution, rules, and financial statements, available to download.</p>
+      </div>
+      <ul class="doc-list">
+        <li><a href="docs/constitution.pdf">Constitution <span>PDF</span></a></li>
+        <li><a href="docs/nomination-rules.pdf">Elections and nomination rules <span>PDF</span></a></li>
+        <li><a href="docs/financial-statements.pdf">Financial statements <span>PDF</span></a></li>
+        <li><a href="docs/manifesto.pdf">Manifesto <span>PDF</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--teal" aria-label="Our reach">
+    <div class="wrap">
+      <dl class="figures">
+        <div><dt>00</dt><dd>Active community projects</dd></div>
+        <div><dt>00</dt><dd>Completed projects</dd></div>
+        <div><dt>00</dt><dd>Registered members</dd></div>
+        <div><dt>00</dt><dd>Counties with an office</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section" id="donate">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Support our work</h2>
+        <p>You can give money, time, or goods. Use only the official accounts listed below.</p>
+      </div>
+      <div class="donate-grid">
+
+        <div class="stk-card">
+          <h3>Donate via M-Pesa</h3>
+          <p class="intro">Enter any amount. You'll receive an M-Pesa prompt on your phone to complete the donation.</p>
+
+          <label for="d-amount">Amount (KSh)</label>
+          <input id="d-amount" name="amount" type="number" inputmode="numeric" min="10" step="1" placeholder="e.g. 500" required>
+
+          <div class="amount-pills" aria-label="Quick amounts">
+            <button type="button" class="amount-pill" data-amt="100">100</button>
+            <button type="button" class="amount-pill" data-amt="500">500</button>
+            <button type="button" class="amount-pill" data-amt="1000">1,000</button>
+            <button type="button" class="amount-pill" data-amt="5000">5,000</button>
+          </div>
+
+          <label for="d-phone">M-Pesa phone number</label>
+          <input id="d-phone" name="phone" type="tel" inputmode="numeric" placeholder="07XX XXX XXX" autocomplete="tel" required>
+
+          <div class="stk-status" id="d-status" role="status" aria-live="polite"></div>
+
+          <button class="btn" type="button" id="d-pay">Donate with M-Pesa</button>
+          <p class="form-note">By donating you agree to Sifuna Party's donation policy.</p>
+        </div>
+
+        <div class="donate-card">
+          <h3>Bank transfer</h3>
+          <dl>
+            <dt>Bank</dt><dd>Your bank name</dd>
+            <dt>Account name</dt><dd>Sifuna Party</dd>
+            <dt>Account number</dt><dd>0000000000</dd>
+          </dl>
+        </div>
+
+        <div class="donate-card">
+          <h3>Online</h3>
+          <dl>
+            <dt>PayPal</dt><dd>payments@example.org</dd>
+            <dt>Card payments</dt><dd>Add your payment gateway link</dd>
+          </dl>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--mist" id="contact">
+    <div class="wrap contact-grid">
+      <div>
+        <h2>Get in touch</h2>
+        <p>Write to us or visit the head office. We reply within a few working days.</p>
+        <ul class="contact-list">
+          <li><strong>Head office</strong>Building name, Street, Town</li>
+          <li><strong>Phone</strong><a href="tel:+254700000000">+254 700 000 000</a></li>
+          <li><strong>Email</strong><a href="mailto:info@example.org">info@example.org</a></li>
+        </ul>
+        <div class="map-placeholder">Paste your Google Maps embed iframe here</div>
+      </div>
+      <form action="#" method="post" onsubmit="event.preventDefault(); alert('Form is a placeholder — connect to your backend.');">
+        <label for="c-name">Your name</label>
+        <input id="c-name" name="name" type="text" autocomplete="name" required>
+        <label for="c-email">Email</label>
+        <input id="c-email" name="email" type="email" autocomplete="email" required>
+        <label for="c-subject">Subject</label>
+        <input id="c-subject" name="subject" type="text">
+        <label for="c-message">Message</label>
+        <textarea id="c-message" name="message" required></textarea>
+        <button class="btn" type="submit">Send message</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; 2026 Sifuna Party. All rights reserved.</p>
+    <ul>
+      <li><a href="#">X</a></li>
+      <li><a href="#">Facebook</a></li>
+      <li><a href="#">YouTube</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+/* ============ Nav toggle ============ */
+const toggle = document.querySelector('.nav-toggle');
+const nav = document.getElementById('nav');
+toggle.addEventListener('click', () => {
+  const open = nav.classList.toggle('is-open');
+  toggle.setAttribute('aria-expanded', open);
+});
+nav.addEventListener('click', e => {
+  if (e.target.tagName === 'A') { nav.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); }
+});
+
+/* ============ Donate STK Push ============ */
+const dStatus  = document.getElementById('d-status');
+const dAmount  = document.getElementById('d-amount');
+const dPhone   = document.getElementById('d-phone');
+const dPay     = document.getElementById('d-pay');
+const pills    = document.querySelectorAll('.amount-pill');
+
+function showStatus(type, html) {
+  dStatus.className = 'stk-status show ' + type;
+  dStatus.innerHTML = html;
+}
+function hideStatus() { dStatus.className = 'stk-status'; dStatus.innerHTML = ''; }
+
+// Quick amount pills
+pills.forEach(p => p.addEventListener('click', () => {
+  pills.forEach(x => x.classList.remove('active'));
+  p.classList.add('active');
+  dAmount.value = p.dataset.amt;
+}));
+dAmount.addEventListener('input', () => {
+  pills.forEach(x => x.classList.toggle('active', x.dataset.amt === dAmount.value));
+});
+
+// Phone normalization
+function normalizePhone(raw) {
+  let p = String(raw || '').replace(/\D/g, '');
+  if (p.startsWith('0')) p = '254' + p.slice(1);
+  if (p.length === 9 && (p.startsWith('7') || p.startsWith('1'))) p = '254' + p;
+  if (p.length === 10 && (p.startsWith('07') || p.startsWith('01'))) p = '254' + p.slice(1);
+  if (!p.startsWith('254')) p = '254' + p;
+  return p;
+}
+
+// Poll transaction status every 3s for up to 90s
+async function pollStatus(transactionId) {
+  const start = Date.now();
+  while (Date.now() - start < 90000) {
+    try {
+      const r = await fetch('/api/status?transactionId=' + encodeURIComponent(transactionId));
+      const d = await r.json();
+      if (d.status === 'COMPLETED' || d.status === 'SUCCESS') return 'success';
+      if (d.status === 'FAILED' || d.status === 'CANCELLED' || d.status === 'REJECTED') return 'failed';
+    } catch (_) {}
+    await new Promise(res => setTimeout(res, 3000));
+  }
+  return 'timeout';
+}
+
+dPay.addEventListener('click', async () => {
+  hideStatus();
+
+  const amount = parseInt(dAmount.value, 10);
+  if (!amount || amount < 10) {
+    showStatus('err', 'Please enter a valid amount (minimum KSh 10).');
+    return;
+  }
+  const phone = normalizePhone(dPhone.value);
+  if (!/^254[17]\d{8}$/.test(phone)) {
+    showStatus('err', 'Please enter a valid M-Pesa phone number, e.g. 0712 345 678.');
+    return;
+  }
+
+  dPay.disabled = true;
+  dPay.textContent = 'Sending STK push…';
+  showStatus('info', '<span class="spinner"></span> Sending M-Pesa prompt to ' + phone.replace(/^254/, '0') + '…');
+
+  try {
+    const reference = 'DON-' + Date.now();
+    const resp = await fetch('/api/stk-push', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        phone,
+        amount,
+        reference,
+        description: 'Sifuna Party Donation'
+      })
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok || !data.transactionId) {
+      throw new Error(data.error || data.message || 'STK push failed');
+    }
+
+    showStatus('info',
+      '<span class="spinner"></span> Prompt sent to <b>' + phone.replace(/^254/, '0') +
+      '</b>. Enter your M-Pesa PIN to confirm KSh ' + amount.toLocaleString() + '…'
+    );
+
+    const result = await pollStatus(data.transactionId);
+
+    if (result === 'success') {
+      showStatus('ok', '✓ Donation received. Thank you for supporting Sifuna Party!');
+      dAmount.value = '';
+      pills.forEach(x => x.classList.remove('active'));
+    } else if (result === 'failed') {
+      showStatus('err', 'Payment was not completed. Please try again.');
+    } else {
+      showStatus('err', 'We did not receive confirmation in time. If you were charged, please contact us with reference ' + reference + '.');
+    }
+  } catch (err) {
+    showStatus('err', err.message || 'Network error. Please try again.');
+  } finally {
+    dPay.disabled = false;
+    dPay.textContent = 'Donate with M-Pesa';
+  }
+});
+</script>
+</body>
+</html>
